@@ -1,6 +1,8 @@
+
 import { useState } from "react";
 
 function Register({ onBackToLogin }) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -15,21 +17,29 @@ function Register({ onBackToLogin }) {
     }
 
     try {
-      const response = await fetch("http://192.168.0.108:5000/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email.trim(),
-          password: password,
-        }),
-      });
+      const response = await fetch(
+        "http://192.168.0.108:5000/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name.trim(),
+            email: email.trim(),
+            password: password,
+          }),
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("Account created successfully! You can now login.");
+        setMessage(
+          "Account created successfully! You can now login."
+        );
+
+        setName("");
         setEmail("");
         setPassword("");
         setConfirmPassword("");
@@ -54,39 +64,65 @@ function Register({ onBackToLogin }) {
         <form onSubmit={handleRegister}>
 
           <div className="input-group">
+            <label>Name</label>
+
+            <input
+              type="text"
+              placeholder="Enter your name"
+              value={name}
+              onChange={(event) =>
+                setName(event.target.value)
+              }
+              required
+            />
+          </div>
+
+          <div className="input-group">
             <label>Email</label>
+
             <input
               type="email"
               placeholder="Enter your email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) =>
+                setEmail(event.target.value)
+              }
               required
             />
           </div>
 
           <div className="input-group">
             <label>Password</label>
+
             <input
               type="password"
               placeholder="Create a password"
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) =>
+                setPassword(event.target.value)
+              }
               required
             />
           </div>
 
           <div className="input-group">
             <label>Confirm Password</label>
+
             <input
               type="password"
               placeholder="Confirm your password"
               value={confirmPassword}
-              onChange={(event) => setConfirmPassword(event.target.value)}
+              onChange={(event) =>
+                setConfirmPassword(event.target.value)
+              }
               required
             />
           </div>
 
-          <button type="submit" className="login-button">
+          <button
+            type="submit"
+            className="login-button"
+          >
             Create Account
           </button>
 
@@ -100,6 +136,7 @@ function Register({ onBackToLogin }) {
 
         <p className="signup-text">
           Already have an account?{" "}
+
           <button
             type="button"
             className="signup-button"
@@ -115,3 +152,4 @@ function Register({ onBackToLogin }) {
 }
 
 export default Register;
+

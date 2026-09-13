@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import "./App.css";
 import Dashboard from "./Dashboard";
@@ -26,6 +27,7 @@ function App() {
     );
   }
 
+  // Login
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -33,7 +35,7 @@ function App() {
 
     try {
       const response = await fetch(
-        "http://192.168.0.107:5000/login",
+        "http://localhost:5000/login",
         {
           method: "POST",
           headers: {
@@ -49,7 +51,12 @@ function App() {
       const data = await response.json();
 
       if (response.ok) {
+        // Save logged-in user in localStorage
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        // Store user in React state
         setLoggedInUser(data.user);
+
         setMessage("");
       } else {
         setMessage(data.message || "Login failed.");
@@ -60,8 +67,14 @@ function App() {
     }
   };
 
+  // Logout
   const handleLogout = () => {
+    // Remove saved user session
+    localStorage.removeItem("user");
+
+    // Clear React state
     setLoggedInUser(null);
+
     setEmail("");
     setPassword("");
     setMessage("");
@@ -108,6 +121,7 @@ function App() {
 
         <div className="login-header">
           <h1>Cashew AI</h1>
+
           <p>
             AI-Powered Cashew Disease & Pest Diagnosis
           </p>
@@ -199,3 +213,4 @@ function App() {
 }
 
 export default App;
+
