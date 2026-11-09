@@ -11,7 +11,7 @@ function ForgotPassword({ onBackToLogin }) {
 
     try {
       const response = await fetch(
-        "http://192.168.0.107:5000/forgot-password",
+        "http://127.0.0.1:5000/forgot-password",
         {
           method: "POST",
           headers: {

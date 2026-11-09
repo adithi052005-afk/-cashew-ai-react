@@ -5,3 +5,11 @@ venv/
 __pycache__/
 *.pyc
 cashew_ai.db
+# Local and generated files
+node_modules/
+dist/
+.vscode/
+cashew-ai-react/
+.env
+.env.*
+!.env.example

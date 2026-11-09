@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
@@ -40,22 +41,27 @@ function CashewChatbot({ diagnosis, confidence, onClose }) {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: trimmedMessage,
-          diagnosis: diagnosis,
-          confidence: confidence,
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:5000/api/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: trimmedMessage,
+            diagnosis: diagnosis,
+            confidence: confidence,
+          }),
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Unable to get response");
+        throw new Error(
+          data.error || data.message || "Unable to get response"
+        );
       }
 
       setMessages((prev) => [
@@ -105,9 +111,7 @@ function CashewChatbot({ diagnosis, confidence, onClose }) {
   return (
     <div className="cashew-chatbot">
 
-      {/* =====================================
-          HEADER
-      ===================================== */}
+      {/* HEADER */}
       <div className="chatbot-header">
 
         <div className="chatbot-header-icon">
@@ -121,24 +125,22 @@ function CashewChatbot({ diagnosis, confidence, onClose }) {
 
         <div className="chatbot-online">
           <span></span>
-          Online
         </div>
 
-        {/* EXIT BUTTON */}
         <button
           className="chatbot-close-btn"
           onClick={onClose}
           aria-label="Close Cashew AI"
           title="Close"
+          type="button"
         >
           ✕
         </button>
 
       </div>
 
-      {/* =====================================
-          CHAT AREA
-      ===================================== */}
+
+      {/* CHAT AREA */}
       <div className="chatbot-messages">
 
         {/* DIAGNOSIS CARD */}
@@ -171,9 +173,8 @@ function CashewChatbot({ diagnosis, confidence, onClose }) {
           </div>
         )}
 
-        {/* =====================================
-            CHAT MESSAGES
-        ===================================== */}
+
+        {/* MESSAGES */}
         {messages.map((message, index) => (
 
           <div
@@ -185,14 +186,12 @@ function CashewChatbot({ diagnosis, confidence, onClose }) {
             }`}
           >
 
-            {/* BOT ICON */}
             {message.sender === "bot" && (
               <div className="chatbot-avatar">
                 🌿
               </div>
             )}
 
-            {/* MESSAGE BUBBLE */}
             <div className="chatbot-bubble">
 
               {message.sender === "bot" ? (
@@ -267,9 +266,8 @@ function CashewChatbot({ diagnosis, confidence, onClose }) {
 
         ))}
 
-        {/* =====================================
-            TYPING INDICATOR
-        ===================================== */}
+
+        {/* TYPING */}
         {loading && (
           <div className="chatbot-message chatbot-bot-message">
 
@@ -278,11 +276,9 @@ function CashewChatbot({ diagnosis, confidence, onClose }) {
             </div>
 
             <div className="chatbot-bubble chatbot-typing">
-
               <span></span>
               <span></span>
               <span></span>
-
             </div>
 
           </div>
@@ -292,15 +288,15 @@ function CashewChatbot({ diagnosis, confidence, onClose }) {
 
       </div>
 
-      {/* =====================================
-          QUICK QUESTIONS
-      ===================================== */}
+
+      {/* QUICK QUESTIONS */}
       {!loading && (
         <div className="chatbot-quick-questions">
 
           {quickQuestions.map((question, index) => (
             <button
               key={index}
+              type="button"
               className="chatbot-quick-btn"
               onClick={() => sendMessage(question)}
             >
@@ -311,27 +307,33 @@ function CashewChatbot({ diagnosis, confidence, onClose }) {
         </div>
       )}
 
-      {/* =====================================
-          INPUT
-      ===================================== */}
+
+      {/* INPUT */}
       <div className="chatbot-input-area">
 
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Ask about the diagnosis..."
-          disabled={loading}
-        />
+        <div className="chatbot-input-wrapper">
 
-        <button
-          className="chatbot-send-btn"
-          onClick={() => sendMessage()}
-          disabled={!input.trim() || loading}
-        >
-          ➤
-        </button>
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Ask about the diagnosis..."
+            disabled={loading}
+          />
+
+          <button
+            type="button"
+            className="chatbot-send-btn"
+            onClick={() => sendMessage()}
+            disabled={!input.trim() || loading}
+            aria-label="Send message"
+            title="Send"
+          >
+            ➤
+          </button>
+
+        </div>
 
       </div>
 
@@ -340,3 +342,4 @@ function CashewChatbot({ diagnosis, confidence, onClose }) {
 }
 
 export default CashewChatbot;
+

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 
 function Register({ onBackToLogin }) {
@@ -18,7 +17,7 @@ function Register({ onBackToLogin }) {
 
     try {
       const response = await fetch(
-        "http://192.168.0.108:5000/register",
+        "http://localhost:5000/register",
         {
           method: "POST",
           headers: {
@@ -152,4 +151,3 @@ function Register({ onBackToLogin }) {
 }
 
 export default Register;
-
